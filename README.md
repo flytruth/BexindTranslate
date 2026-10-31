@@ -1,6 +1,6 @@
 # BexindTranslate
 
-> **Real-time, packet-level translation for Paper 1.21.1 — so every player reads your server in their own language.**
+> Packet-level translation for Paper 1.21.1. Players read your server in their own language, and you don't have to think about it.
 
 [![Version](https://img.shields.io/badge/version-2.0.0-blue.svg)]()
 [![Paper 1.21.1](https://img.shields.io/badge/Paper-1.21.1-brightgreen.svg)](https://papermc.io/)
@@ -8,52 +8,52 @@
 [![ProtocolLib 5.3.0+](https://img.shields.io/badge/ProtocolLib-5.3.0+-red.svg)](https://github.com/dmulloy2/ProtocolLib)
 [![License](https://img.shields.io/badge/license-MIT-lightgrey.svg)]()
 
-BexindTranslate intercepts chat, UI, and system packets *before* they hit the client and swaps in a translation on the fly. No client mods. No per-message commands. No lag spikes. Just a fully localized server experience backed by a resilient multi-provider failover chain, a WAL-mode SQLite store, and a two-tier Caffeine cache.
+BexindTranslate sits between your server and the client and translates packets as they go out. No client mods, no commands for players to remember, no lag spikes. Behind it there's a failover chain across four translation backends, a SQLite database in WAL mode, and a two-tier Caffeine cache.
 
 ---
 
-## Why BexindTranslate?
+## What it actually does
 
 <table>
 <tr>
 <td width="50%" valign="top">
 
-### 🌍 Players stop being second-class citizens
-Non-English speakers see chat, titles, boss bars, tab lists, inventory names, and advancement toasts in their language — automatically.
+### Players don't get left out
+Chat, titles, boss bars, tab list, inventory names, advancement toasts — all translated before the packet reaches the client.
 
 </td>
 <td width="50%" valign="top">
 
-### 🔁 Your server keeps talking, even when an API doesn't
-A live failover chain rotates through Google → Gemini → LibreTranslate → Ollama the moment a quota runs dry or an endpoint drops.
-
-</td>
-</tr>
-<tr>
-<td width="50%" valign="top">
-
-### ⚡ Repeated strings are free
-The dual-tier Caffeine cache answers repeat lookups in **sub-millisecond** time, so spamming the same boss-bar text doesn't cost you a single API call.
-
-</td>
-<td width="50%" valign="top">
-
-### 🛡️ Quotas are protected
-A token-bucket rate limiter caps outbound requests, so you never trip a provider's abuse detection.
+### One provider goes down, another picks up
+Google → Gemini → LibreTranslate → Ollama. The chain rotates on its own when a quota runs out or an endpoint stops responding.
 
 </td>
 </tr>
 <tr>
 <td width="50%" valign="top">
 
-### 💾 Nothing gets lost on a crash
-SQLite runs in **Write-Ahead Logging (WAL)** mode for concurrent-safe, crash-resilient local persistence.
+### The same string twice costs nothing
+Repeated lookups hit the Caffeine cache and come back in under a millisecond. A boss bar that updates every tick doesn't burn API calls.
 
 </td>
 <td width="50%" valign="top">
 
-### 🎛️ Customizable join menu
-An interactive language-selection GUI on player join — forced or optional, your call.
+### Outbound requests are capped
+A token-bucket limiter keeps you under provider rate limits, so you're not going to get flagged for hammering an API.
+
+</td>
+</tr>
+<tr>
+<td width="50%" valign="top">
+
+### A crash won't eat your data
+SQLite runs in WAL mode — safe for concurrent reads and writes, and it survives a hard stop without corrupting the database.
+
+</td>
+<td width="50%" valign="top">
+
+### Language menu on join
+A GUI players see when they connect. Make it required or optional — either way it's configurable.
 
 </td>
 </tr>
@@ -61,22 +61,22 @@ An interactive language-selection GUI on player join — forced or optional, you
 
 ---
 
-## Feature Breakdown
+## Details
 
-### Packet-Level Translation Engine
-Intercepts server-side network packets dynamically for low-latency, context-aware translation — no client-side mods required.
+### How translation works
+Packets are intercepted server-side before they reach the client, translated, and sent on. Latency is low enough that players won't notice, and there's nothing to install on their end.
 
-### Provider Failover Chain
-Seamless rotation across translation backends when a quota is hit or an endpoint goes down:
+### Provider failover
+When a provider hits a quota or goes down, the next one in the chain takes over:
 
 | Provider | Type | Notes |
 |---|---|---|
-| Google Translate | Cloud API | Fast, broad language coverage |
-| Gemini API | Cloud LLM | Context-aware, high quality |
-| LibreTranslate | Self-hostable | Open source, privacy-friendly |
-| Ollama | Local AI | Fully offline, no data leaves your machine |
+| Google Translate | Cloud API | Fast, covers a lot of languages |
+| Gemini API | Cloud LLM | Better with context, higher quality |
+| LibreTranslate | Self-hostable | Open source, you keep the data |
+| Ollama | Local AI | Fully offline, nothing leaves your machine |
 
-### Extensive Packet Coverage
+### What gets translated
 
 <table>
 <tr>
@@ -101,14 +101,13 @@ Seamless rotation across translation backends when a quota is hit or an endpoint
 </tr>
 </table>
 
-### Robust Cache & Database Pipeline
-- **Dual-tier Caffeine in-memory cache** — sub-millisecond repeated lookups.
-- **SQLite with WAL mode** — crash-resilient persistence, safe for concurrent reads/writes.
+### Caching and storage
+Two tiers of Caffeine cache in memory for repeated strings, backed by SQLite in WAL mode for persistence. Both run concurrently without locking each other out.
 
-### Smart Rate Limiting & Filter Logic
-- **Token-bucket rate limiter** — eliminates provider API ban risk.
-- **Language match skip** — skips translation when source == target language.
-- **Negative cache** — prevents endless lookup loops on un-translatable strings and formatting tokens.
+### Filtering
+- Token-bucket rate limiter on outbound calls.
+- If the source and target language match, translation is skipped entirely.
+- Negative cache stops the plugin from re-querying strings it already knows it can't translate — formatting tokens, for example.
 
 ---
 
@@ -130,15 +129,15 @@ Seamless rotation across translation backends when a quota is hit or an endpoint
 <td width="50%" valign="top">
 
 ### Option 1 — Drop-in
-1. Place `BexindTranslate-2.0.0.jar` into `plugins/`.
-2. Ensure **ProtocolLib** is in the same directory.
-3. Start or restart the server to generate the database and config.
+1. Drop `BexindTranslate-2.0.0.jar` into `plugins/`.
+2. Make sure **ProtocolLib** is in the same folder.
+3. Start the server. The database and config generate on first boot.
 
 </td>
 <td width="50%" valign="top">
 
 ### Option 2 — Build from source
-Compile the shaded JAR and prep your server in one shot:
+Compiles the shaded JAR and sets up the server directory in one step:
 
 ```bash
 bash BexindTranslate-2.0.0-installer.sh
@@ -150,4 +149,4 @@ bash BexindTranslate-2.0.0-installer.sh
 
 ---
 
-<p align="center"><em>Built for servers that refuse to leave anyone out of the conversation.</em></p>
+<p align="center"><em>For servers where not everyone speaks English.</em></p>
