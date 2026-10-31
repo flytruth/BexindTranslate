@@ -1,0 +1,12 @@
+/home/daniel/BexindTranslate/src/main/java/com/bexind/translate/AdvancementRewriter.java
+/home/daniel/BexindTranslate/src/main/java/com/bexind/translate/BexindTranslate.java
+/home/daniel/BexindTranslate/src/main/java/com/bexind/translate/CacheManager.java
+/home/daniel/BexindTranslate/src/main/java/com/bexind/translate/DeepTextScanner.java
+/home/daniel/BexindTranslate/src/main/java/com/bexind/translate/JsonText.java
+/home/daniel/BexindTranslate/src/main/java/com/bexind/translate/LangCommand.java
+/home/daniel/BexindTranslate/src/main/java/com/bexind/translate/LangManager.java
+/home/daniel/BexindTranslate/src/main/java/com/bexind/translate/LanguageMenuListener.java
+/home/daniel/BexindTranslate/src/main/java/com/bexind/translate/PacketInterceptor.java
+/home/daniel/BexindTranslate/src/main/java/com/bexind/translate/RateLimiter.java
+/home/daniel/BexindTranslate/src/main/java/com/bexind/translate/Stats.java
+/home/daniel/BexindTranslate/src/main/java/com/bexind/translate/TranslationService.java
