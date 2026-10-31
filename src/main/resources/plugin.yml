@@ -1,0 +1,18 @@
+name: BexindTranslate
+version: 2.0.0
+main: com.bexind.translate.BexindTranslate
+api-version: '1.21'
+depend: [ProtocolLib]
+softdepend: [PlaceholderAPI, DecentHolograms, DeluxeMenus, TAB]
+author: BexindStudio
+description: Universal real-time packet-level dynamic server translation.
+commands:
+  bexindtranslate:
+    aliases: [btr]
+    description: Main command for BexindTranslate
+    permission: bexindtranslate.use
+permissions:
+  bexindtranslate.use:
+    default: true
+  bexindtranslate.admin:
+    default: op
