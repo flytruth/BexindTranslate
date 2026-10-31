@@ -2,42 +2,13 @@
 
 > **Real-time, packet-level translation for Paper 1.21.1 — so every player reads your server in their own language.**
 
+[![Version](https://img.shields.io/badge/version-2.0.0-blue.svg)]()
+[![Paper 1.21.1](https://img.shields.io/badge/Paper-1.21.1-brightgreen.svg)](https://papermc.io/)
+[![Java 21](https://img.shields.io/badge/Java-21-orange.svg)](https://openjdk.org/)
+[![ProtocolLib 5.3.0+](https://img.shields.io/badge/ProtocolLib-5.3.0+-red.svg)](https://github.com/dmulloy2/ProtocolLib)
+[![License](https://img.shields.io/badge/license-MIT-lightgrey.svg)]()
+
 BexindTranslate intercepts chat, UI, and system packets *before* they hit the client and swaps in a translation on the fly. No client mods. No per-message commands. No lag spikes. Just a fully localized server experience backed by a resilient multi-provider failover chain, a WAL-mode SQLite store, and a two-tier Caffeine cache.
-
----
-
-<table>
-<tr>
-<td width="25%" valign="top" align="center">
-
-**📦 Version**
-
-`2.0.0`
-
-</td>
-<td width="25%" valign="top" align="center">
-
-**🟪 Server**
-
-Paper 1.21.1
-
-</td>
-<td width="25%" valign="top" align="center">
-
-**☕ Java**
-
-21+
-
-</td>
-<td width="25%" valign="top" align="center">
-
-**🔌 Dependency**
-
-ProtocolLib 5.3.0+
-
-</td>
-</tr>
-</table>
 
 ---
 
