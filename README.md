@@ -1,77 +1,192 @@
 # BexindTranslate
 
-A high-performance, packet-level automatic translation plugin built specifically for **Paper 1.21.1**. Powered by ProtocolLib, SQLite WAL persistence, Caffeine caching, token-bucket rate limiting, and multi-provider AI translation models.
+> **Real-time, packet-level translation for Paper 1.21.1 — so every player reads your server in their own language.**
+
+BexindTranslate intercepts chat, UI, and system packets *before* they hit the client and swaps in a translation on the fly. No client mods. No per-message commands. No lag spikes. Just a fully localized server experience backed by a resilient multi-provider failover chain, a WAL-mode SQLite store, and a two-tier Caffeine cache.
 
 ---
 
-## Features
+## Why BexindTranslate?
 
-- **Packet-Level Translation System**: Intercepts server-side network packets dynamically to provide low-latency, real-time context translations.
-- **Provider Failover Chain**: Seamlessly fails over across translation services if an API quota is reached or an endpoint experiences downtime:
-  - Google Translate
-  - Gemini API
-  - LibreTranslate
-  - Ollama (Local AI models)
-- **Extensive Packet Coverage**:
-  - Chat & System Messages (`SYSTEM_CHAT`, Unsigned Player Chat)
-  - Action Bars & Titles (`SET_TITLE_TEXT`, `SET_SUBTITLE_TEXT`, `SET_ACTION_BAR_TEXT`)
-  - Boss Bars (`BOSS`)
-  - Player Tab List (`PLAYER_INFO`)
-  - Inventory & Container Titles (`OPEN_WINDOW`)
-  - Advancement Notifications & Toasts (`ADVANCEMENTS`)
-- **Robust Cache & Database Pipeline**:
-  - Dual-tier Caffeine in-memory cache for sub-millisecond repeated string lookup.
-  - SQLite back-end configured with **Write-Ahead Logging (WAL)** for crash-resilient local persistence and concurrent safe operation.
-- **Smart Rate Limiting & Filter Logic**:
-  - Built-in token-bucket rate limiter to eliminate provider API ban risks.
-  - Automatic language match skip (skips translation when source language equals target language).
-  - Negative cache mechanisms to prevent endless lookup loops on un-translatable strings or syntax formatting elements.
-- **Customizable Player Join Menu**: Interactive, forced or optional language selection menu on player join.
+<table>
+<tr>
+<td width="50%" valign="top">
+
+### 🌍 Players stop being second-class citizens
+Non-English speakers see chat, titles, boss bars, tab lists, inventory names, and advancement toasts in their language — automatically.
+
+</td>
+<td width="50%" valign="top">
+
+### 🔁 Your server keeps talking, even when an API doesn't
+A live failover chain rotates through Google → Gemini → LibreTranslate → Ollama the moment a quota runs dry or an endpoint drops.
+
+</td>
+</tr>
+<tr>
+<td width="50%" valign="top">
+
+### ⚡ Repeated strings are free
+The dual-tier Caffeine cache answers repeat lookups in **sub-millisecond** time, so spamming the same boss-bar text doesn't cost you a single API call.
+
+</td>
+<td width="50%" valign="top">
+
+### 🛡️ Quotas are protected
+A token-bucket rate limiter caps outbound requests, so you never trip a provider's abuse detection.
+
+</td>
+</tr>
+<tr>
+<td width="50%" valign="top">
+
+### 💾 Nothing gets lost on a crash
+SQLite runs in **Write-Ahead Logging (WAL)** mode for concurrent-safe, crash-resilient local persistence.
+
+</td>
+<td width="50%" valign="top">
+
+### 🎛️ Customizable join menu
+An interactive language-selection GUI on player join — forced or optional, your call.
+
+</td>
+</tr>
+</table>
 
 ---
 
-## GitHub Statistics & Activity
+## Feature Breakdown
 
-<div align="center">
+### Packet-Level Translation Engine
+Intercepts server-side network packets dynamically for low-latency, context-aware translation — no client-side mods required.
 
-[![GitHub Stats](https://github-readme-stats.vercel.app/api?username=Daniel&show_icons=true&theme=tokyonight&hide_border=true&count_private=true)](https://github.com/Daniel)
+### Provider Failover Chain
+Seamless rotation across translation backends when a quota is hit or an endpoint goes down:
 
-[![Top Languages](https://github-readme-stats.vercel.app/api/top-langs/?username=Daniel&layout=compact&theme=tokyonight&hide_border=true)](https://github.com/Daniel)
+| Provider | Type | Notes |
+|---|---|---|
+| Google Translate | Cloud API | Fast, broad language coverage |
+| Gemini API | Cloud LLM | Context-aware, high quality |
+| LibreTranslate | Self-hostable | Open source, privacy-friendly |
+| Ollama | Local AI | Fully offline, no data leaves your machine |
 
-[![GitHub Streak](https://github-readme-streak-stats.herokuapp.com/?user=Daniel&theme=tokyonight&hide_border=true)](https://github.com/Daniel)
+### Extensive Packet Coverage
 
-</div>
+<table>
+<tr>
+<td width="50%" valign="top">
+
+| Surface | Packet |
+|---|---|
+| Chat & system messages | `SYSTEM_CHAT`, unsigned player chat |
+| Action bars & titles | `SET_TITLE_TEXT`, `SET_SUBTITLE_TEXT`, `SET_ACTION_BAR_TEXT` |
+| Boss bars | `BOSS` |
+
+</td>
+<td width="50%" valign="top">
+
+| Surface | Packet |
+|---|---|
+| Player tab list | `PLAYER_INFO` |
+| Inventory & container titles | `OPEN_WINDOW` |
+| Advancement notifications | `ADVANCEMENTS` |
+
+</td>
+</tr>
+</table>
+
+### Robust Cache & Database Pipeline
+- **Dual-tier Caffeine in-memory cache** — sub-millisecond repeated lookups.
+- **SQLite with WAL mode** — crash-resilient persistence, safe for concurrent reads/writes.
+
+### Smart Rate Limiting & Filter Logic
+- **Token-bucket rate limiter** — eliminates provider API ban risk.
+- **Language match skip** — skips translation when source == target language.
+- **Negative cache** — prevents endless lookup loops on un-translatable strings and formatting tokens.
 
 ---
 
 ## Commands & Permissions
 
-| Command | Description | Permission Required |
+| Command | Description | Permission |
 |---|---|---|
-| `/lang` | Opens the language selection GUI menu for the player. | *None (Available to all)* |
-| `/btr stats` | Displays real-time translation statistics, cache hit-rates, and provider health. | `bexindtranslate.admin` |
-| `/btr debug` | Toggles live debug logging in console for real-time packet inspection. | `bexindtranslate.admin` |
-| `/btr reload` | Instantly reloads `config.yml`, translation providers, and regex ignore patterns. | `bexindtranslate.admin` |
+| `/lang` | Opens the language-selection GUI. | *None — available to all players* |
+| `/btr stats` | Live translation stats, cache hit-rates, and provider health. | `bexindtranslate.admin` |
+| `/btr debug` | Toggles live console debug logging for packet inspection. | `bexindtranslate.admin` |
+| `/btr reload` | Hot-reloads `config.yml`, providers, and regex ignore patterns. | `bexindtranslate.admin` |
 
 ---
 
 ## Requirements
 
-- **Server Software**: Paper 1.21.1 (or compatible forks)
-- **Java**: Java 21+
-- **Dependency**: ProtocolLib 5.3.0+
+<table>
+<tr>
+<td width="33%" valign="top" align="center">
+
+**Server**
+
+Paper 1.21.1
+*(or compatible forks)*
+
+</td>
+<td width="33%" valign="top" align="center">
+
+**Java**
+
+21+
+
+</td>
+<td width="33%" valign="top" align="center">
+
+**Dependency**
+
+ProtocolLib 5.3.0+
+
+</td>
+</tr>
+</table>
 
 ---
 
-## Fast Installation & Build
+## Installation
 
-### Option 1: Direct Plugin Installation
-1. Place `BexindTranslate-2.0.0.jar` into your server's `plugins/` directory.
-2. Ensure **ProtocolLib** is installed in the same directory.
-3. Start or restart your server to initialize the database and configuration file.
+<table>
+<tr>
+<td width="50%" valign="top">
 
-### Option 2: Build from Source Script
-Run the automated shell script to compile the shaded JAR locally and prepare the server environment:
+### Option 1 — Drop-in
+1. Place `BexindTranslate-2.0.0.jar` into `plugins/`.
+2. Ensure **ProtocolLib** is in the same directory.
+3. Start or restart the server to generate the database and config.
+
+</td>
+<td width="50%" valign="top">
+
+### Option 2 — Build from source
+Compile the shaded JAR and prep your server in one shot:
 
 ```bash
 bash BexindTranslate-2.0.0-installer.sh
+```
+
+</td>
+</tr>
+</table>
+
+---
+
+## GitHub Activity
+
+<div align="center">
+
+[![GitHub Stats](https://github-readme-stats.vercel.app/api?username=flytruth&show_icons=true&theme=tokyonight&hide_border=true&count_private=true)](https://github.com/flytruth)
+
+[![Top Languages](https://github-readme-stats.vercel.app/api/top-langs/?username=flytruth&layout=compact&theme=tokyonight&hide_border=true)](https://github.com/flytruth)
+
+[![GitHub Streak](https://github-readme-streak-stats.herokuapp.com/?user=flytruth&theme=tokyonight&hide_border=true)](https://github.com/flytruth)
+
+</div>
+
+---
+
+<p align="center"><em>Built for servers that refuse to leave anyone out of the conversation.</em></p>
