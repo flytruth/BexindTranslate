@@ -6,6 +6,41 @@ BexindTranslate intercepts chat, UI, and system packets *before* they hit the cl
 
 ---
 
+<table>
+<tr>
+<td width="25%" valign="top" align="center">
+
+**📦 Version**
+
+`2.0.0`
+
+</td>
+<td width="25%" valign="top" align="center">
+
+**🟪 Server**
+
+Paper 1.21.1
+
+</td>
+<td width="25%" valign="top" align="center">
+
+**☕ Java**
+
+21+
+
+</td>
+<td width="25%" valign="top" align="center">
+
+**🔌 Dependency**
+
+ProtocolLib 5.3.0+
+
+</td>
+</tr>
+</table>
+
+---
+
 ## Why BexindTranslate?
 
 <table>
@@ -117,37 +152,6 @@ Seamless rotation across translation backends when a quota is hit or an endpoint
 
 ---
 
-## Requirements
-
-<table>
-<tr>
-<td width="33%" valign="top" align="center">
-
-**Server**
-
-Paper 1.21.1
-*(or compatible forks)*
-
-</td>
-<td width="33%" valign="top" align="center">
-
-**Java**
-
-21+
-
-</td>
-<td width="33%" valign="top" align="center">
-
-**Dependency**
-
-ProtocolLib 5.3.0+
-
-</td>
-</tr>
-</table>
-
----
-
 ## Installation
 
 <table>
@@ -172,20 +176,6 @@ bash BexindTranslate-2.0.0-installer.sh
 </td>
 </tr>
 </table>
-
----
-
-## GitHub Activity
-
-<div align="center">
-
-[![GitHub Stats](https://github-readme-stats.vercel.app/api?username=flytruth&show_icons=true&theme=tokyonight&hide_border=true&count_private=true)](https://github.com/flytruth)
-
-[![Top Languages](https://github-readme-stats.vercel.app/api/top-langs/?username=flytruth&layout=compact&theme=tokyonight&hide_border=true)](https://github.com/flytruth)
-
-[![GitHub Streak](https://github-readme-streak-stats.herokuapp.com/?user=flytruth&theme=tokyonight&hide_border=true)](https://github.com/flytruth)
-
-</div>
 
 ---
 
