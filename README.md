@@ -1,6 +1,6 @@
 # BexindTranslate
 
-> Packet-level translation for Paper 1.21.1. Players read your server in their own language, and you don't have to think about it.
+> Packet-level translation for Paper 1.21+ Players read your server in their own language, and you don't have to think about it.
 
 [![Version](https://img.shields.io/badge/version-2.0.0-blue.svg)]()
 [![Paper 1.21.1](https://img.shields.io/badge/Paper-1.21.1-brightgreen.svg)](https://papermc.io/)
