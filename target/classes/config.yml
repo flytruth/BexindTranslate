@@ -1,0 +1,81 @@
+# ============================================================
+#  BexindTranslate 2.0.0
+#  Universal real-time packet-level dynamic server translation
+# ============================================================
+
+config-version: 2
+
+# Primary translation provider:
+#   GOOGLE_FREE   - free Google Translate web endpoint (no key needed)
+#   GEMINI        - Google Gemini (free tier API key)
+#   LIBRETRANSLATE - LibreTranslate server (self-hosted or public)
+#   OLLAMA        - local Ollama / OpenAI-style local model
+provider: "GOOGLE_FREE"
+
+# Tried in order when the primary provider fails or is rate-limited.
+# Example: ["LIBRETRANSLATE", "GEMINI"]
+failover-providers: []
+
+gemini-api-key: "YOUR_FREE_API_KEY_HERE"
+gemini-model: "gemini-2.0-flash"
+
+libretranslate-url: "http://localhost:5000"
+libretranslate-api-key: ""
+
+ollama-url: "http://localhost:11434"
+ollama-model: "llama3"
+
+default-language: "en"
+
+# Timeout for a single HTTP translation call
+http-timeout-seconds: 6
+
+# Token-bucket rate limiter shared by ALL provider calls.
+# Protects the free Google endpoint from IP bans under load.
+rate-limit:
+  requests-per-second: 10
+  burst: 25
+  max-wait-ms: 2000
+
+# If a provider detects the text is ALREADY in the player's language,
+# remember it and never call the API for that string again.
+same-language-skip: true
+
+# Remember failed translations for N minutes so dead providers are
+# not hammered on every packet.
+negative-cache-minutes: 5
+
+# Verbose per-packet logging (can also be toggled live with /btr debug)
+debug: false
+
+features:
+  chat: true
+  guis-and-menus: true
+  holograms-and-actionbars: true
+  titles: true
+  boss-bars: true
+  tab-list: true
+  advancements: true
+  signs: true
+  scoreboards: true
+
+# Players get this menu on first join and cannot close it until they choose.
+force-language-menu: true
+
+# Languages offered in the join menu (ISO codes)
+menu-languages:
+  - en
+  - ru
+  - es
+  - de
+  - fr
+  - tr
+  - ar
+  - fa
+
+# Blacklist specific strings or placeholders from being translated
+ignored-patterns:
+  - "^https?://.*"                      # Don't translate URLs
+  - "%\\w+%"                            # Skip raw PAPI placeholders
+  - "^\\d+$"                            # Numbers
+  - "^[A-Za-z0-9_+/=:;.\\-\\[\\]()#]+$" # pure codes/symbols
