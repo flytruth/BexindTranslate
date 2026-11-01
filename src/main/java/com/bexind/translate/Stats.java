@@ -2,10 +2,6 @@ package com.bexind.translate;
 
 import java.util.concurrent.atomic.LongAdder;
 
-/**
- * Thread-safe counters backing /btr stats.
- * LongAdder keeps increment cost near zero on hot packet paths.
- */
 public final class Stats {
 
     public final LongAdder packetsSeen = new LongAdder();      // packets reaching a handler
